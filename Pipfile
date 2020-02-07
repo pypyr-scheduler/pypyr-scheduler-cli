@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 click = "*"
-pyrsched-cli = {path = "./../pypyr-scheduler-rpc-client",editable = true}
+pyrsched-rpc = {path = "./../pypyr-scheduler-rpc-client",editable = true}
 rich = "*"
 halo = "*"
 

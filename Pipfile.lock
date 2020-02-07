@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fde1eb83c90486a86b9a6b7a29752f67dc32f9e8f05a310d983f6beea913d1e0"
+            "sha256": "14efb02910d7442d446017aace5030a79647ad8fc1c3c50109a6c30f7b884390"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -66,17 +66,17 @@
             ],
             "version": "==0.4.0"
         },
-        "pyrsched-cli": {
+        "pyrsched-rpc": {
             "editable": true,
             "path": "./../pypyr-scheduler-rpc-client"
         },
         "rich": {
             "hashes": [
-                "sha256:282c2e4873bbd3c1400cddf1b819bf1f67371a7628b2ff7398c5438bdd28b7fb",
-                "sha256:d5f4262b9d00854b9ada5b944c9357c1251c5b8c441f839cb90362d3e3ff2093"
+                "sha256:04f1016b1aba52499104b594c17b1481504bbc7314f8b9ba1a7a9dbf3e8869c4",
+                "sha256:604edf76a2a7d40c7ecc9af5ae41cee3da3e99532c8d0aa54cc42e017ee7f63a"
             ],
             "index": "pypi",
-            "version": "==0.3.2"
+            "version": "==0.3.3"
         },
         "rpyc": {
             "hashes": [

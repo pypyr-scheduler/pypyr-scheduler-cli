@@ -1,6 +1,7 @@
 import sys
 import click
 from dataclasses import dataclass
+from multiprocessing.context import AuthenticationError
 
 from rich.console import Console
 from rich.table import Table
@@ -8,11 +9,13 @@ from rich.text import Text
 from pyrsched.rpc import RPCScheduler
 from halo import Halo
 
+
 PYRSCHED_LOGO = "[italic bold][#e20074]P[/#e20074][white]S[/white][/bold italic]"
 
 
 @dataclass
 class ContextWrapper:
+    """ Wraps some objects which are accessible in each command. """
     scheduler: RPCScheduler
     con: Console
     json_output: bool
@@ -32,7 +35,7 @@ def make_job_table(job_list):
             job["name"],
             str(job["trigger"]["interval"]),
             job["next_run_time"],
-            "[bold green]✔[/bold green]" if job["next_run_time"] is not None else "[bold red]х[/bold red]",
+            "[bold green]✔[/bold green]" if job["is_running"] else "[bold red]х[/bold red]",
         )
 
     return table
@@ -53,6 +56,11 @@ def cli(ctx, json):
             "[bold][red]Could not connect to server, is it running? Exiting...[/red][/bold]"
         )
         ctx.exit()
+    except AuthenticationError:
+        ctx.obj.con.print(
+            "[bold][red]Could not connect to server, wrong authentication key. Is the shared secret set to the correct value? Exiting...[/red][/bold]"
+        )
+        ctx.exit()        
 
 
 @cli.command(name="add")
@@ -79,6 +87,36 @@ def add_job_command(ctx, pipeline_filename, interval, start):
 
     if start:
         ctx.invoke(start_job_command, job_id=job_id)
+
+@cli.command(name="get")
+@click.argument("job_id", type=click.STRING)
+@click.pass_context
+def get_job_command(ctx, job_id):
+    with Halo(text="Loading job...", spinner="dots", color="magenta") as spinner:
+        job = ctx.obj.scheduler.get_job(job_id)
+        spinner.color = "green"
+        spinner.stop()
+        ctx.obj.con.print(job)        
+
+
+@cli.command(name="reschedule")
+@click.argument("job_id", type=click.STRING)
+@click.argument("interval", type=click.INT)
+@click.pass_context
+def reschedule_command(ctx, job_id, interval):
+    """ Change the interval of a job.
+
+    Rescheduling a job restarts a job with the new interval if it was not running.
+
+    JOB_ID: ID or name of the job. Name resolution works only if the name is unambiguous.
+    INTERVAL: Execution interval in seconds (integer)
+    """
+    with Halo(text="Rescheduling job...", spinner="dots", color="magenta") as spinner:
+        job = ctx.obj.scheduler.reschedule_job(job_id, interval)
+        spinner.color = "green"
+        spinner.stop()
+        ctx.obj.con.print(job)    
+
 
 @cli.command(name="start")
 @click.argument("job_id", type=click.STRING)
