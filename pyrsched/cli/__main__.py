@@ -222,6 +222,31 @@ def status_command(ctx):
             
             ctx.obj.con.print(last_job_id_status)
 
+@cli.command(name="remove")
+@click.argument("job_id", type=click.STRING)
+@click.pass_context
+def remove_job(ctx, job_id):
+    """ Remove a job.
+
+    JOB_ID: ID or name of the job. Name resolution works only if the name is unambiguous.
+    """ 
+    with Halo(text="Removing job...", spinner="dots", color="magenta") as spinner:
+        job = ctx.obj.scheduler.exposed_remove_job(job_id)
+        if job is None:
+            spinner.color = "red"
+            ctx.obj.con.print(
+                f"[bold][red]Job {ctx.obj.scheduler.get_previous_job_id()} not found.[/red][/bold]",
+                highlight=False,
+            )
+            spinner.stop()
+            ctx.exit()
+        spinner.color = "green"        
+        # if ctx.obj.json_output:        
+        spinner.stop()
+        ctx.obj.con.print(job)
+     
+
+
 if __name__ == "__main__":
     cli(prog_name="pyrsched-cli")
 
