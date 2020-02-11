@@ -43,12 +43,13 @@ def make_job_table(job_list):
 
 @click.group()
 @click.option("--json", is_flag=True, help="Output json instead of formatted text.")
+@click.option("--port", type=click.INT, default=12345, help="Server port to connect to.")
 @click.pass_context
-def cli(ctx, json):
+def cli(ctx, json, port):
     # workaround for too wide calculated console width
     c = Console()
     c = Console(width=c.width-1)
-    ctx.obj = ContextWrapper(scheduler=RPCScheduler(), con=c, json_output=json,)
+    ctx.obj = ContextWrapper(scheduler=RPCScheduler(port=port), con=c, json_output=json,)
     try:
         ctx.obj.scheduler.connect()
     except ConnectionError:
@@ -231,7 +232,7 @@ def remove_job(ctx, job_id):
     JOB_ID: ID or name of the job. Name resolution works only if the name is unambiguous.
     """ 
     with Halo(text="Removing job...", spinner="dots", color="magenta") as spinner:
-        job = ctx.obj.scheduler.exposed_remove_job(job_id)
+        job = ctx.obj.scheduler.remove_job(job_id)
         if job is None:
             spinner.color = "red"
             ctx.obj.con.print(
@@ -248,5 +249,6 @@ def remove_job(ctx, job_id):
 
 
 if __name__ == "__main__":
+    
     cli(prog_name="pyrsched-cli")
 
