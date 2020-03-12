@@ -16,4 +16,4 @@ python_version = "3.8"
 
 [scripts]
 # command line parameters are populated to the called script
-pyrsched-cli = "python -m pyrsched.cli"
+cli = "python -m pyrsched.cli"
