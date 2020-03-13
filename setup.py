@@ -3,7 +3,7 @@ from os import path
 from pkg_resources import parse_version
 
 NAME = "pypyr-scheduler-cli"
-VERSION = str(parse_version("1.0.0"))
+VERSION = str(parse_version("1.0.1"))
 
 here = path.abspath(path.dirname(__file__))
 
@@ -38,13 +38,9 @@ setup(
     #     ('conf', ['conf/scheduler_config.py',]),
     # ],
 
-    # install_requires=[
-    #     "apscheduler",
-    #     "pytz",
-    #     "psutil",
-    #     "click",
-    #     "pypyr",
-    # ],
+    install_requires=[
+        "pypyr-scheduler-rpc-client",
+    ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
 )
