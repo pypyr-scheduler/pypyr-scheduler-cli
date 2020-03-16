@@ -8,7 +8,7 @@ twine = "*"
 
 [packages]
 click = "*"
-pyrsched-rpc = {path = "./../pypyr-scheduler-rpc-client",editable = true}
+pypyr-scheduler-rpc-client = "*"
 rich = "*"
 halo = "*"
 

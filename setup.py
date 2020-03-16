@@ -3,7 +3,7 @@ from os import path
 from pkg_resources import parse_version
 
 NAME = "pypyr-scheduler-cli"
-VERSION = str(parse_version("1.0.1"))
+VERSION = str(parse_version("1.0.2"))
 
 here = path.abspath(path.dirname(__file__))
 
@@ -40,6 +40,8 @@ setup(
 
     install_requires=[
         "pypyr-scheduler-rpc-client",
+        "rich",
+        "halo",
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
