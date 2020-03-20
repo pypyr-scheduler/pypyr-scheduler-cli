@@ -2,8 +2,7 @@ from setuptools import (setup, find_namespace_packages)
 from os import path
 from pkg_resources import parse_version
 
-NAME = "pypyr-scheduler-cli"
-VERSION = str(parse_version("1.0.2"))
+from pyrsched.cli import (NAME, VERSION)
 
 here = path.abspath(path.dirname(__file__))
 
